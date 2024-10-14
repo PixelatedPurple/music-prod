@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload | Demo</title>
+</head>
+<body>
+  <h1>Upload Your Music</h1>
+  <form id="uploadForm" enctype="multipart/form-data" action="/upload" method="POST">
+    <label for="songName">Song Name:</label><br>
+    <input type="text" id="songName" name="songName" required><br><br>
+
+    <label for="author">Author:</label><br>
+    <input type="text" id="author" name="author" required><br><br>
+
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description" required></textarea><br><br>
+
+    <label for="file">Choose a music file:</label><br>
+    <input type="file" id="file" name="file" accept="audio/*" required><br><br>
+
+    <button type="submit">Upload</button>
+  </form>
+</body>
+</html>
