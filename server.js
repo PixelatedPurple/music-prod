@@ -1,23 +1,49 @@
 const express = require('express');
 const path = require('path');
-const uploadRoute = require('./routes/upload');  // Import upload route
+const multer = require('multer');
 const app = express();
-const { PORT } = require('./config/config'); // Import configuration
+const PORT = process.env.PORT || 3000;
 
-// Middleware for serving static files
-app.use(express.static('public'));
+// Set up Multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'public/uploads')); // Save files to public/uploads
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname); // Use a unique name for each file
+  }
+});
+
+const upload = multer({ storage });
+
+// Middleware for serving static assets
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Route to serve upload form
+// Route to serve the upload form
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/index.html'));
 });
 
-// Use upload route for handling file uploads
-app.use('/upload', uploadRoute);
+// Handle file upload
+app.post('/upload', upload.single('musicFile'), (req, res) => {
+  const { songName, author, description } = req.body;
+  const fileUrl = `/uploads/${req.file.filename}`;
+  
+  // For now, just send back the metadata and file URL
+  res.send(`
+    <h1>Upload successful!</h1>
+    <p>Song Name: ${songName}</p>
+    <p>Author: ${author}</p>
+    <p>Description: ${description}</p>
+    <p>File URL: <a href="${fileUrl}">${fileUrl}</a></p>
+    <a href="/">Upload another file</a>
+  `);
+});
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

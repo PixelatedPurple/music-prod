@@ -1,0 +1,16 @@
+{
+  "name": "music-upload-app",
+  "version": "1.0.0",
+  "description": "A music upload and serving app using Node.js and Express.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "express": "^5.0.1",
+    "multer": "^1.4.4"
+  }
+}
